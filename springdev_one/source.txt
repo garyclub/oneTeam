@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+  	<Resource 
+  	auth="Container" 
+  	driverClassName="oracle.jdbc.OracleDriver" 
+  	maxActive="100" 
+  	maxWait="-1" 
+  	name="spring_jndi" 
+  	password="spring" 
+  	type="javax.sql.DataSource" 
+  	url="jdbc:oracle:thin:@localhost:1521:xe" 
+  	username="spring"/>
+</Context>
+
+
+public class AopAdviceImpl {
+	private static final Logger logger = LoggerFactory.getLogger(AopAdviceImpl.class);
+	
+	public void ad_before() {
+		logger.info("☆☆☆☆☆☆☆☆☆☆ before advice 수행중1... ☆☆☆☆☆☆☆☆☆☆");
+	}
+	
+	public void ad_before2() {
+		logger.info("☆☆☆☆☆☆☆☆☆☆ before advice 수행중2... ☆☆☆☆☆☆☆☆☆☆");
+	}
+	public void ad_after() {
+		logger.info("★★★★★★★★★★★★★★★★★★★★★");
+		logger.info("★          after returning advice      ★");
+		logger.info("★★★★★★★★★★★★★★★★★★★★★");
+	}
+	
+	public Object ad_around(ProceedingJoinPoint joinpoint) {
+		logger.info("♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠");
+		logger.info("♠          around advice(before)       ♠");
+		logger.info("♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠");
+
+		Object obj = null;
+		
+		try {
+			logger.info("시간 측정을 시작합니다.");
+			long start = System.currentTimeMillis();
+			obj = joinpoint.proceed();
+			long end = System.currentTimeMillis();
+			logger.info("시간 측정을 종료합니다.");
+			logger.info("소요 시간 : " + ((double)end - start) / 1000 + "초");
+		} catch (Throwable e) {
+			logger.info(e.getMessage());
+		}
+
+		logger.info("♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠");
+		logger.info("♠          around advice(after)       ♠");
+		logger.info("♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠♠");
+		return obj;
+	}
+	
+}
+
+
+
+<beans:bean id="aopAdviceImpl" 
+		class="kr.co.oraclejava.aop.AopAdviceImpl" />
+	
+<aop:config>
+	<aop:pointcut 
+	expression="execution(* kr.co.oraclejava.jdbc.EmpDeptController.empInsertAction(..))" 
+	id="insert_aop"/>
+	<aop:pointcut 
+	expression="execution(* kr.co.oraclejava.jdbc.EmpDeptController.empList(..))" 
+	id="list_aop"/>
+
+	<aop:aspect ref="aopAdviceImpl">
+		<aop:before method="ad_before2" pointcut-ref="insert_aop" />
+		<aop:before method="ad_before" pointcut-ref="insert_aop" />
+		<aop:after-returning method="ad_after" pointcut-ref="list_aop"/>
+		<aop:around method="ad_around" pointcut-ref="list_aop"/>
+	</aop:aspect>	
+</aop:config>

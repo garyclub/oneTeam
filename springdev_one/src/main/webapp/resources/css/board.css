@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+table {border-collapse:collapse;}
+table caption {font-family:나눔고딕코딩;font-size:2.2em;padding-bottom:20px;}
+table td,table th {padding:10px;border:solid 1px gray;}
+table td {background:#eee;text-align:left;}
+table th {background:pink;text-align:center;}
+.msg_warn {color:rgba(255,0,0,1.0); font-size: 0.8em;}
+.msg_ok{color:rgba(0,255,0,1.0);}
+.page {font-size: 1.4em;}
+.game {border-collapse:collapse; width:300px;}
+.search {text-align:right;}
+.textZipcode {width:80px;}
+.address {width:300px;}
+.input_text_300 {width:300px;}
+.width {width:645px;}
+
+table td.center {text-align:center;}
+table td.width {width: 681px;}
+table td.comment {width:93px; text-align:center;}
+table td.commentcontent {width: 573px; text-align:center;}
+table td.commentinsert {width: 418px;}
+
+div.logInfo {font-size: 0.8em; text-align: right;}
+div.right {width:765px;text-align:right;}

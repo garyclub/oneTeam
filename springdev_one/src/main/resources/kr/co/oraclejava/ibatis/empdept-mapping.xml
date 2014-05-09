@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="empdept">
+	<typeAlias alias="EmpVO" type="kr.co.oraclejava.jdbc.EmpVO"/>
+	<typeAlias alias="DeptVO" type="kr.co.oraclejava.jdbc.DeptVO"/>
+	
+	<select id="getTotalSal" resultClass="Integer">
+		SELECT sum(sal) AS sum_sal FROM t_emp
+	</select>
+	
+	<select id="getEmpList" resultClass="EmpVO">
+	SELECT	e.empno, e.ename, e.sal, d.deptno AS "deptVO.deptno", d.dname AS "deptVO.dname"
+	FROM 	t_emp e join t_dept d
+	on		e.deptno = d.deptno
+	ORDER by empno ASC
+	</select>
+	
+	<insert id="empInsert" parameterClass="EmpVO">
+	INSERT INTO t_emp(empno, ename, sal, deptno)
+	VALUES (seq_emp.nextval, #ename#, #sal#, #deptVO.deptno#)
+	</insert>
+	
+	<select id="getDeptList" resultClass="DeptVO">
+	SELECT deptno, dname
+	FROM 	t_dept
+	ORDER BY deptno desc
+	</select>
+	
+	<select id="getEmp" parameterClass="int" resultClass="EmpVO">
+	SELECT empno, ename, sal, deptno AS "deptVO.deptno"
+	FROM t_emp
+	WHERE empno = #empno#
+	</select>
+	
+	<update id="updateEmp" parameterClass="EmpVO">
+	UPDATE t_emp
+	SET ename=#ename#, sal=#sal#, deptno=#deptVO.deptno#
+	WHERE empno=#empno#
+	</update>
+	
+	<delete id="deleteEmp" parameterClass="Integer">
+	DELETE
+	FROM t_emp
+	WHERE empno=#empno#
+	</delete>
+</sqlMap>
